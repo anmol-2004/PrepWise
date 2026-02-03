@@ -9,6 +9,7 @@ import {
   getInterviewsByUserId,
   getLatestInterviews,
 } from "@/lib/actions/general.action";
+import StartInterviewButton from "@/components/StartInterviewButton";
 
 async function Home() {
   const user = await getCurrentUser();
@@ -31,7 +32,7 @@ async function Home() {
           </p>
 
           <Button asChild className="btn-primary max-sm:w-full">
-            <Link href="/interview">Start an Interview</Link>
+            <StartInterviewButton />
           </Button>
         </div>
 

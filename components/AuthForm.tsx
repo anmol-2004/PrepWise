@@ -8,6 +8,7 @@ import { auth } from "@/firebase/client";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react"; // Add this
 
 import {
   createUserWithEmailAndPassword,
@@ -40,6 +41,9 @@ const AuthForm = ({ type }: { type: FormType }) => {
       password: "",
     },
   });
+
+  // Extract isSubmitting from formState
+  const { isSubmitting } = form.formState;
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     try {
@@ -138,8 +142,19 @@ const AuthForm = ({ type }: { type: FormType }) => {
               type="password"
             />
 
-            <Button className="btn" type="submit">
-              {isSignIn ? "Sign In" : "Create an Account"}
+            <Button 
+              className="btn flex items-center justify-center gap-2" 
+              type="submit" 
+              disabled={isSubmitting} // Disable button while loading
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Please wait...
+                </>
+              ) : (
+                isSignIn ? "Sign In" : "Create an Account"
+              )}
             </Button>
           </form>
         </Form>

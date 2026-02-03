@@ -7,6 +7,7 @@ import DisplayTechIcons from "./DisplayTechIcons";
 
 import { cn, getRandomInterviewCover } from "@/lib/utils";
 import { getFeedbackByInterviewId } from "@/lib/actions/general.action";
+import NavButton from "./NavButton";
 
 const InterviewCard = async ({
   interviewId,
@@ -36,6 +37,10 @@ const InterviewCard = async ({
   const formattedDate = dayjs(
     feedback?.createdAt || createdAt || Date.now()
   ).format("MMM D, YYYY");
+
+  const targetHref = feedback
+    ? `/interview/${interviewId}/feedback`
+    : `/interview/${interviewId}`;
 
   return (
     <div className="card-border w-[360px] max-sm:w-full min-h-96">
@@ -91,17 +96,9 @@ const InterviewCard = async ({
         <div className="flex flex-row justify-between">
           <DisplayTechIcons techStack={techstack} />
 
-          <Button className="btn-primary">
-            <Link
-              href={
-                feedback
-                  ? `/interview/${interviewId}/feedback`
-                  : `/interview/${interviewId}`
-              }
-            >
-              {feedback ? "Check Feedback" : "View Interview"}
-            </Link>
-          </Button>
+          <NavButton href={targetHref} className="btn-primary">
+            {feedback ? "Check Feedback" : "View Interview"}
+          </NavButton>
         </div>
       </div>
     </div>

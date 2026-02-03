@@ -168,7 +168,7 @@ const Agent = ({
 
   return (
     <>
-      <div className="call-view">
+      <div className="call-view py-2">
         {/* AI Interviewer Card */}
         <div className="card-interviewer">
           <div className="avatar">
@@ -200,7 +200,7 @@ const Agent = ({
       </div>
 
       {messages.length > 0 && (
-        <div className="transcript-border">
+        <div className="transcript-border mt-2">
           <div className="transcript">
             <p
               key={lastMessage}
