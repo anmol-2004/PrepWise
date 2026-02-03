@@ -45,9 +45,22 @@ const Agent = ({
     };
 
     const onMessage = (message: Message) => {
+      // 1. Handle Final Transcripts (Saving to message history)
       if (message.type === "transcript" && message.transcriptType === "final") {
-        const newMessage = { role: message.role, content: message.transcript };
+        const newMessage: SavedMessage = {
+          role: message.role,
+          content: message.transcript,
+        };
         setMessages((prev) => [...prev, newMessage]);
+        setLastMessage(""); // Clear the "live" message once it's finalized
+      }
+
+      // 2. Handle Partial Transcripts (For the real-time "typing" effect in UI)
+      if (
+        message.type === "transcript" &&
+        message.transcriptType === "partial"
+      ) {
+        setLastMessage(message.transcript);
       }
     };
 
@@ -119,17 +132,16 @@ const Agent = ({
 
     if (type === "generate") {
       await vapi.start(
-        undefined,
+        null, // 1: assistantId
+        null, // 2: assistant object
+        null, // 3: squadId
+        generator, // 4: workflowId (your 'generator' constant)
         {
           variableValues: {
             username: userName,
             userid: userId,
           },
-          clientMessages: ["transcript"],
-          serverMessages: [],
-        },
-        undefined,
-        generator
+        }
       );
     } else {
       let formattedQuestions = "";

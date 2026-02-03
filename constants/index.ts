@@ -98,206 +98,105 @@ export const mappings = {
 };
 
 export const generator: CreateWorkflowDTO = {
-  name: "Generate Interview",
+  name: "interview-prep",
   nodes: [
     {
-      name: "start",
+      name: "introduction",
       type: "conversation",
       isStart: true,
       metadata: {
         position: {
-          x: 0,
-          y: 0,
+          x: -425.5707914507883,
+          y: -374.0044614346634,
         },
       },
       prompt:
-        "Speak first. Greet the user and help them create a new AI Interviewer",
-      voice: {
-        model: "aura-2",
-        voiceId: "thalia",
-        provider: "deepgram",
-      },
+        "You are an AI Interviewer. Start by greeting the caller using their name: {{username}}. Then, inform them that you will collect some information to create a perfect interview prep session. Ask the questions one by one (role, level, type, techstack, amount) and await an answer for each.",
       variableExtractionPlan: {
         output: [
           {
-            title: "level",
-            description: "The job experience level.",
-            type: "string",
-            enum: ["entry", "mid", "senior"],
-          },
-          {
-            title: "amount",
-            description: "How many questions would you like to generate?",
-            type: "number",
             enum: [],
-          },
-          {
-            title: "techstack",
-            description:
-              "A list of technologies to cover during the job interview. For example, React, Next.js, Express.js, Node and so on...",
             type: "string",
-            enum: [],
-          },
-          {
             title: "role",
             description:
               "What role should would you like to train for? For example Frontend, Backend, Fullstack, Design, UX?",
-            type: "string",
-            enum: [],
           },
           {
-            title: "type",
-            description: "What type of the interview should it be? ",
+            enum: ["entry", "mid", "senior"],
             type: "string",
-            enum: ["behavioural", "technical", "mixed"],
+            title: "level",
+            description: "The job experience level.",
+          },
+          {
+            enum: ["Technical", "Behavioural", "Mixed"],
+            type: "string",
+            title: "type",
+            description: "What type of the interview should it be?",
+          },
+          {
+            enum: [],
+            type: "string",
+            title: "techstack",
+            description:
+              "A list of technologies to cover during the job interview.",
+          },
+          {
+            enum: [],
+            type: "number",
+            title: "amount",
+            description: "How many questions would you like to generate?",
           },
         ],
       },
+      messagePlan: {
+        firstMessage:
+          "Hey {{username}}! I'm your AI Interviewer. I'm going to ask you a few questions to get your interview prep started. Are you ready to begin?",
+      },
+      toolIds: [],
     },
     {
-      name: "apiRequest_1747470739045",
-      type: "apiRequest",
+      name: "Tool",
+      type: "tool",
       metadata: {
         position: {
-          x: -16.075937072883846,
-          y: 703.623428447121,
+          x: -428.04663884270883,
+          y: 207.18314529850085,
         },
       },
-      method: "POST",
-      url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/vapi/generate`,
-      headers: {
-        type: "object",
-        properties: {
-          "Content-Type": {
-            type: "string",
-            value: "application/json", // Adding a standard header fixes the "empty" error
-          },
-        },
-      },
-      body: {
-        type: "object",
-        properties: {
-          role: {
-            type: "string",
-            description: "",
-            value: "{{ role }}",
-          },
-          level: {
-            type: "string",
-            description: "",
-            value: "{{ level }}",
-          },
-          type: {
-            type: "string",
-            description: "",
-            value: "{{ type }}",
-          },
-          amount: {
-            type: "number",
-            description: "",
-            value: "{{ amount }}",
-          },
-          userid: {
-            type: "string",
-            description: "",
-            value: "{{ userid }}",
-          },
-          techstack: {
-            type: "string",
-            description: "",
-            value: "{{ techstack }}",
-          },
-        },
-      },
-      output: {
-        type: "object",
-        properties: {
-          success: {
-            type: "boolean", // Defining an expected output property fixes the error
-          },
-        },
-      },
-      mode: "blocking",
-      hooks: [],
+      toolId: "47129cfb-3e6e-49fc-9582-2a7981cbbe0c",
     },
     {
-      name: "conversation_1747721261435",
-      type: "conversation",
+      name: "tool_1770050618694",
+      type: "tool",
       metadata: {
         position: {
-          x: -17.547788169718615,
-          y: 1003.3409337989506,
+          x: -428.04663884270883,
+          y: 457.18314529850085,
         },
       },
-      prompt:
-        "Thank the user for the conversation and inform them that the interview was generated successfully.",
-      voice: {
-        provider: "deepgram",
-        voiceId: "thalia",
-        model: "aura-2",
-      },
-    },
-    {
-      name: "conversation_1747744490967",
-      type: "conversation",
-      metadata: {
-        position: {
-          x: -11.165436030430953,
-          y: 484.94857971060617,
-        },
-      },
-      prompt: "Say that the Interview will be generated shortly.",
-      voice: {
-        provider: "deepgram",
-        voiceId: "thalia",
-        model: "aura-2",
-      },
-    },
-    {
-      name: "hangup_1747744730181",
-      type: "hangup",
-      metadata: {
-        position: {
-          x: 76.01267674000721,
-          y: 1272.0665127156606,
-        },
-      },
+      toolId: "05d28865-b286-4c7b-9854-b8805af092a8",
     },
   ],
   edges: [
     {
-      from: "apiRequest_1747470739045",
-      to: "conversation_1747721261435",
+      from: "introduction",
+      to: "Tool",
       condition: {
         type: "ai",
-        prompt: "",
+        prompt: "If user provided all the data to be extracted.",
       },
     },
     {
-      from: "start",
-      to: "conversation_1747744490967",
-      condition: {
-        type: "ai",
-        prompt: "If user provided all the required variables",
-      },
-    },
-    {
-      from: "conversation_1747744490967",
-      to: "apiRequest_1747470739045",
-      condition: {
-        type: "ai",
-        prompt: "",
-      },
-    },
-    {
-      from: "conversation_1747721261435",
-      to: "hangup_1747744730181",
+      from: "Tool",
+      to: "tool_1770050618694",
       condition: {
         type: "ai",
         prompt: "",
       },
     },
   ],
+  globalPrompt:
+    "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
 };
 
 export const interviewer: CreateAssistantDTO = {
