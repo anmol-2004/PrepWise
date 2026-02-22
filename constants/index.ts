@@ -98,105 +98,108 @@ export const mappings = {
 };
 
 export const generator: CreateWorkflowDTO = {
-  name: "interview-prep",
-  nodes: [
+  "name": "jsm_interview_prep",
+  "nodes": [
     {
-      name: "introduction",
-      type: "conversation",
-      isStart: true,
-      metadata: {
-        position: {
-          x: -425.5707914507883,
-          y: -374.0044614346634,
-        },
+      "name": "introduction",
+      "type": "conversation",
+      "isStart": true,
+      "metadata": {
+        "position": {
+          "x": -838.6857536128283,
+          "y": -433.46531736768634
+        }
       },
-      prompt:
-        "You are an AI Interviewer. Start by greeting the caller using their name: {{username}}. Then, inform them that you will collect some information to create a perfect interview prep session. Ask the questions one by one (role, level, type, techstack, amount) and await an answer for each.",
-      variableExtractionPlan: {
-        output: [
+      "prompt": "You are an AI Interviewer. Start by greeting the caller using their name: {{username}}. Then, inform them that you will collect some information to create a perfect interview prep session. Ask the questions one by one (role, level, type, techstack, amount) and await an answer for each.",
+      "variableExtractionPlan": {
+        "output": [
           {
-            enum: [],
-            type: "string",
-            title: "role",
-            description:
-              "What role should would you like to train for? For example Frontend, Backend, Fullstack, Design, UX?",
+            "enum": [],
+            "type": "string",
+            "title": "role",
+            "description": "What role should would you like to train for? For example Frontend, Backend, Fullstack, Design, UX?"
           },
           {
-            enum: ["entry", "mid", "senior"],
-            type: "string",
-            title: "level",
-            description: "The job experience level.",
+            "enum": [
+              "entry",
+              "mid",
+              "senior"
+            ],
+            "type": "string",
+            "title": "level",
+            "description": "The job experience level."
           },
           {
-            enum: ["Technical", "Behavioural", "Mixed"],
-            type: "string",
-            title: "type",
-            description: "What type of the interview should it be?",
+            "enum": [
+              "Technical",
+              "Behavioural",
+              "Mixed"
+            ],
+            "type": "string",
+            "title": "type",
+            "description": "What type of the interview should it be?"
           },
           {
-            enum: [],
-            type: "string",
-            title: "techstack",
-            description:
-              "A list of technologies to cover during the job interview.",
+            "enum": [],
+            "type": "string",
+            "title": "techstack",
+            "description": "A list of technologies to cover during the job interview."
           },
           {
-            enum: [],
-            type: "number",
-            title: "amount",
-            description: "How many questions would you like to generate?",
-          },
-        ],
+            "enum": [],
+            "type": "number",
+            "title": "amount",
+            "description": "How many questions would you like to generate?"
+          }
+        ]
       },
-      messagePlan: {
-        firstMessage:
-          "Hey {{username}}! I'm your AI Interviewer. I'm going to ask you a few questions to get your interview prep started. Are you ready to begin?",
+      "messagePlan": {
+        "firstMessage": "Hey {{username}}! I'm your AI Interviewer. I'm going to ask you a few questions to get your interview prep started. Are you ready to begin?"
       },
-      toolIds: [],
+      "toolIds": []
     },
     {
-      name: "Tool",
-      type: "tool",
-      metadata: {
-        position: {
-          x: -428.04663884270883,
-          y: 207.18314529850085,
-        },
+      "name": "tool_1771783058999",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -829.8465242335463,
+          "y": 149.8999049366629
+        }
       },
-      toolId: "47129cfb-3e6e-49fc-9582-2a7981cbbe0c",
+      "toolId": "5c09e6d4-1a14-40a3-868f-555dc4ebb4d1"
     },
     {
-      name: "tool_1770050618694",
-      type: "tool",
-      metadata: {
-        position: {
-          x: -428.04663884270883,
-          y: 457.18314529850085,
-        },
+      "name": "tool_1771783102634",
+      "type": "tool",
+      "metadata": {
+        "position": {
+          "x": -829.8465242335463,
+          "y": 399.8999049366629
+        }
       },
-      toolId: "05d28865-b286-4c7b-9854-b8805af092a8",
-    },
+      "toolId": "bf843bb9-b065-46b6-916e-d9c42f70fd82"
+    }
   ],
-  edges: [
+  "edges": [
     {
-      from: "introduction",
-      to: "Tool",
-      condition: {
-        type: "ai",
-        prompt: "If user provided all the data to be extracted.",
-      },
+      "from": "introduction",
+      "to": "tool_1771783058999",
+      "condition": {
+        "type": "ai",
+        "prompt": "If user provided all the data to be extracted."
+      }
     },
     {
-      from: "Tool",
-      to: "tool_1770050618694",
-      condition: {
-        type: "ai",
-        prompt: "",
-      },
-    },
+      "from": "tool_1771783058999",
+      "to": "tool_1771783102634",
+      "condition": {
+        "type": "ai",
+        "prompt": ""
+      }
+    }
   ],
-  globalPrompt:
-    "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters.",
+  "globalPrompt": "You are a voice assistant helping with creating new AI interviewers. Your task is to collect data from the user. Remember that this is a voice conversation - do not use any special characters."
 };
 
 export const interviewer: CreateAssistantDTO = {
